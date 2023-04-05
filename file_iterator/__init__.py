@@ -1,1 +1,1 @@
-import file_iterator.filesystemiterator
+from filesystemiterator import FileSystemIterator
