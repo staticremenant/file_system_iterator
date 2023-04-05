@@ -4,6 +4,8 @@ import re
 
 class FileSystemIterator:
     def __init__(self, root: str, only_files=False, only_dirs=False, pattern=None):
+        if only_files is True and only_dirs is True:
+            raise ValueError("Params 'only_files' and 'only_dirs' can't both be True")
         self.root = root
         self.only_files = only_files
         self.only_dirs = only_dirs
