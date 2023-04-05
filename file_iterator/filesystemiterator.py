@@ -9,16 +9,18 @@ class FileSystemIterator:
         self.only_dirs = only_dirs
         self.pattern = pattern
 
-    def __iter__(self):
-        for path, _, files in os.walk(self.root):
-            if not self.only_files:
-                if self.pattern is None or re.search(self.pattern, path):
+        def gen():
+            for path, _, files in os.walk(self.root):
+                if not self.only_files:
                     yield path
-            if not self.only_dirs:
-                for file in files:
-                    full_path = os.path.join(path, file)
-                    if self.pattern is None or re.search(self.pattern, full_path):
-                        yield full_path
+                if not self.only_dirs:
+                    for file in files:
+                        yield os.path.join(path, file)
+
+        self.__it = (it for it in gen() if self.pattern is None or re.search(self.pattern, it))
+
+    def __iter__(self):
+        return self
 
     def __next__(self):
-        next(self.__iter__())
+        return next(self.__it)
